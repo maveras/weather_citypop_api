@@ -3,7 +3,7 @@ const app = express()
 const weatherApi = require('./routes/weather')
 const {errorHandler, logErrors, wrapErrors} = require('./utils/middleware/errorHandlers')
 const notFoundHandler = require('./utils/middleware/notFoundHandler')
-
+const {config} = require('./config/index')
 app.use(express.json())
 
 //routes
@@ -20,6 +20,6 @@ app.use(wrapErrors)
 app.use(errorHandler)
 app.use(logErrors)
 
-app.listen(5000, () => {
+app.listen(config.port || 80, () => {
   console.log('app listen at port 5000')
 })
