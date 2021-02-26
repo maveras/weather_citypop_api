@@ -1,15 +1,13 @@
-const { json } = require('body-parser')
 const express = require('express')
 const weatherServices = require('../services/weather')
 const validationHandler = require('../utils/middleware/validationHandler')
 const { createWeatherSchema } = require('../utils/schemas/weather')
-const { log } = require('console')
+
 
 const weatherApi = (app) => {
   const router = express.Router();
   app.use('/api/weather', router);
   const weatherService = weatherServices()
-  
   router.get('/', async (req, res, next) => {
     // const { tags } = req.query;
     // try {
