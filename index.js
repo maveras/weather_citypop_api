@@ -8,7 +8,7 @@ const cors = require('cors')
 const {config} = require('./config/index')
 app.use(express.json())
 
-const allowedOrigins = ['weather-citypop-api-front-git-main-mavera.vercel.app'];
+const allowedOrigins = ['https://weather-citypop-api-front-git-main-mavera.vercel.app'];
 
 if(config.dev) {
   allowedOrigins.push('http://localhost:3000')
