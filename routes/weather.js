@@ -23,11 +23,11 @@ const weatherApi = (app) => {
   router.post('/', validationHandler(createWeatherSchema) ,async (req, res, next) => {
     try {
       const city = req.body.city
-      const createdWheater = await weatherService.createWeather(city)
+      const createdWeather = await weatherService.createWeather(city)
       const cityPopSong = await weatherService.getCityPopSong()
-      const result = {createdWheater, cityPopSong}
-      if (createdWheater.resWeather.cod != 200) {
-        res.status(createdWheater.resWeather.cod).json({
+      const result = {createdWeather, cityPopSong}
+      if (createdWeather.resWeather.cod != 200) {
+        res.status(createdWeather.resWeather.cod).json({
           data: {},
           message: "Not found"
         })

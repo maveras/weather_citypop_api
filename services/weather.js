@@ -40,12 +40,14 @@ const weatherServices = () => {
   }
 
   const apiWeather = async (city) => {
-    const res = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${config.weatherKey}`)
+    const lowerCity = city.toLowerCase()
+    const res = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${lowerCity}&appid=${config.weatherKey}`)
     const apiWeather = res.json()
     return apiWeather || {}
   }
 
   const createWeather = async (city) => {
+    console.log('asdasd', city.city)
     const resWeather = await apiWeather(city)
     const mongoObj = { resWeather, city }
     const createdWeatherId = await mongoDB.create(collection, mongoObj)
