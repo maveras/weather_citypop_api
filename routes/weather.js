@@ -24,8 +24,8 @@ const weatherApi = (app) => {
     try {
       const city = req.body.city
       const createdWeather = await weatherService.createWeather(city)
-      const cityPopSong = await weatherService.getCityPopSong()
-      const result = {createdWeather, cityPopSong}
+      const cityALbum = createdWeather.cityALbum
+      const result = {createdWeather, cityALbum}
       if (createdWeather.resWeather.cod != 200) {
         res.status(createdWeather.resWeather.cod).json({
           data: {},

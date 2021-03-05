@@ -47,11 +47,11 @@ const weatherServices = () => {
   }
 
   const createWeather = async (city) => {
-    console.log('asdasd', city.city)
     const resWeather = await apiWeather(city)
-    const mongoObj = { resWeather, city }
+    const cityALbum = await getCityPopSong()
+    const mongoObj = { resWeather, city, cityALbum }
     const createdWeatherId = await mongoDB.create(collection, mongoObj)
-    return {createdWeatherId, resWeather}
+    return {createdWeatherId, resWeather, cityALbum}
   }
 
   const getCityPopSong = async () => {
@@ -78,8 +78,7 @@ const weatherServices = () => {
 
   return {
     getWeather,
-    createWeather,
-    getCityPopSong
+    createWeather
   }
 }
 
