@@ -1,43 +1,11 @@
-const MongoLib = require('../lib/mongo')
 const fetch = require('node-fetch')
 const { config } = require('../config')
+const Weather = require('../schema/weather')
 
-// class MoviesService {
-//   constructor() {
-//     this.collection = 'movies'
-//     this.mongoDB = new MongoLib()
-//   }
-//   async getMovies({tags}) {
-//     const query = tags && { tags: { $in: tags}}
-//     const movies = await this.mongoDB.getAll(this.collection, query)
-//     return movies || []
-//   }
-//   async getMovie({movieId}) {
-//     const movie = await this.mongoDB.get(this.collection, movieId)
-//     return movie || {}
-//   }
-//   async createMovie({movie}) {
-//     const createdMovieId = await this.mongoDB.create(this.collection, movie)
-//     return createdMovieId
-//   }
-//   async updateMovie({movieId, movie} = {}) {
-//     const createdMovieId = await this.mongoDB.update(this.collection, movieId, movie)
-//     return createdMovieId
-//   }
-//   async deleteMovie({movieId}) {
-//     const deleteMovie = await this.mongoDB.delete(this.collection, movieId)
-//     return deleteMovie
-//   }
-// }
+
 const weatherServices = () => {
-  const collection = 'weather'
-  const mongoDB = new MongoLib()
-
-  const getWeather = async ({tags}) => {
-    const query = tags && { tags: { $in: tags}}
-    const weather = await mongoDB.getAll(collection, query)
-    return weather || []
-  }
+  let collection = ''
+  config.dev ? collection = 'weatherDev' : 'weather'
 
   const apiWeather = async (city) => {
     const lowerCity = city.toLowerCase()
@@ -49,8 +17,15 @@ const weatherServices = () => {
   const createWeather = async (city) => {
     const resWeather = await apiWeather(city)
     const cityALbum = await getCityPopSong()
-    const mongoObj = { resWeather, city, cityALbum }
-    const createdWeatherId = await mongoDB.create(collection, mongoObj)
+    const weather = new Weather({
+      city,
+      resWeather,
+      cityALbum
+    })
+    console.log('weather', weather)
+    const qwea = await weather.save()
+    console.log('q wea', qwea)
+    const createdWeatherId = 'asklñdjalsk'
     return {createdWeatherId, resWeather, cityALbum}
   }
 
@@ -77,7 +52,6 @@ const weatherServices = () => {
   }
 
   return {
-    getWeather,
     createWeather
   }
 }
