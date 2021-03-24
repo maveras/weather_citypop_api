@@ -24,14 +24,14 @@ const weatherApi = (app) => {
     try {
       const city = req.body.city
       const createdWeather = await weatherService.createWeather(city)
-      const cityALbum = createdWeather.cityALbum
-      const result = {createdWeather, cityALbum}
       if (createdWeather.resWeather.cod != 200) {
         res.status(createdWeather.resWeather.cod).json({
           data: {},
           message: "Not found"
         })
       } else {
+        const cityALbum = createdWeather.cityALbum
+        const result = {createdWeather, cityALbum}
         res.status(201).json({
           data: result,
           message: "Weather Created"
