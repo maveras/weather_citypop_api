@@ -1,33 +1,12 @@
+const { string } = require('@hapi/joi')
 const fetch = require('node-fetch')
 const { config } = require('../config')
-const Weather = require('../schema/weather')
+const Weather = require('../models/weather')
 
 
 const weatherServices = () => {
   let collection = ''
   config.dev ? collection = 'weatherDev' : 'weather'
-
-  const apiWeather = async (city) => {
-    const lowerCity = city.toLowerCase()
-    const res = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${lowerCity}&appid=${config.weatherKey}`)
-    const apiWeather = res.json()
-    return apiWeather || {}
-  }
-
-  const createWeather = async (city) => {
-    const resWeather = await apiWeather(city)
-    const cityALbum = await getCityPopSong()
-    const weather = new Weather({
-      city,
-      resWeather,
-      cityALbum
-    })
-    console.log('weather', weather)
-    const qwea = await weather.save()
-    console.log('q wea', qwea)
-    const createdWeatherId = 'asklñdjalsk'
-    return {createdWeatherId, resWeather, cityALbum}
-  }
 
   const getCityPopSong = async () => {
     const res = await fetch(`https://api.discogs.com/database/search?style=city+pop&key=${config.discogKey}&secret=${config.discogSecret}&page=1&per_page=100`)
@@ -51,8 +30,41 @@ const weatherServices = () => {
     }
   }
 
+  const getCities = async (cityString) => {
+    const lowerCity = cityString.toLowerCase()
+    const res = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${lowerCity}.json?access_token=${config.mapBoxToken}`)
+    const cities = res.json()
+    return cities
+  }
+
+  const getWeatherByCoord = async (lat, lon) => {
+    const res = await fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${lat.toFixed(2)}&lon=${lon.toFixed(2)}&appid=${config.weatherKey}`)
+    const apiWeather = res.json()
+    return apiWeather || {}
+  }
+
+  const createWeather = async (cityObject) => {
+    try {
+      const {lat, lon, city } = cityObject
+      const resWeather = await getWeatherByCoord(lat, lon)
+      const cityAlbum = await getCityPopSong()
+      const weather = new Weather({
+        city,
+        resWeather,
+        cityAlbum
+      })
+      await weather.save()
+      const createdWeatherId = weather._id
+      return {createdWeatherId, resWeather, cityAlbum}
+    } catch (error) {
+      return error
+    }
+  }
+
   return {
-    createWeather
+    createWeather,
+    getCities,
+    getWeatherByCoord
   }
 }
 

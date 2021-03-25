@@ -8,7 +8,8 @@ const config = {
   dbName: process.env.DB_NAME,
   weatherKey: process.env.WEATHER_KEY,
   discogSecret: process.env.DISCOG_SECRET,
-  discogKey: process.env.DISCOG_KEY
+  discogKey: process.env.DISCOG_KEY,
+  mapBoxToken: process.env.MAPBOX_TOKEN
 }
 
 module.exports = {config}
